@@ -1,20 +1,19 @@
 import sys
-import map
 import inventory
 import character
 import message
+import map
+from map import map_layout, tiles
 
 main_menu = ["explore", "search", "view map", "view inventory"]
-# Directions choices for a sub menu
 direction_menu = ["north", "south", "east", "west"]
 
 def SetUpGame():
-    '''This fuction will call all the the nessesary setup functions.'''
-    inventory.HideKey()    
-    map.ExportMap()
+    character.row = 0
+    character.col = 0
+    map.export_map()
 
 def Movement():
-    '''This function will allow the player to move around the map.'''  
     global direction_menu
     orientating = True
     while orientating:
@@ -38,50 +37,49 @@ def Movement():
         elif dirchoice == direction_menu[3] and character.col > 0:
             character.col -= 1
         elif dirchoice == "quit":
-            print(f"{message.messages['Quit']} ")
+            print(f"{message.message['Quit']} ")
             sys.exit()
         else:
-            print(f"{message.messages['Error']}")
+            print(f"{message.message['Error']}")
             orientating = True
 
 
 def MainMenu():
-    '''When the game is activated these are all the players inital
-       actions that are possible. This is the games main menu.'''
     thinking = True
     while thinking:
         print("   Choose one of the following options: ")
-        # loop through all main menu options and print to the screen
         for options in main_menu:
             print(f"   -{options.capitalize()}")
         mainChoice = input("   Choice: ").lower()
-        if mainChoice == main_menu[0]: # walk
+        if mainChoice == main_menu[0]:
             Movement()
             thinking = False
-        elif mainChoice == main_menu[1]: # look
+        elif mainChoice == main_menu[1]:
             inventory.InspectRoom()
             thinking = False
-        elif mainChoice == main_menu[2]: # view map
-            map.ReadMap()
+        elif mainChoice == main_menu[2]:
+            map.update_map(character.row, character.col)
+            map.read_map()
             thinking = False
-        elif mainChoice == main_menu[3]: # view inventory
+        elif mainChoice == main_menu[3]:
             inventory.ViewInventory()
             thinking = False
         elif mainChoice == "cheat":
             print(inventory.items["Key"]["Location"])
         elif mainChoice == "quit":
-            print(f"{message.messages['Quit']} ")
+            print(f"{message.message['Quit']} ")
             sys.exit()
         else:
-            print(f"{message.messages['Error']}") 
+            print(f"{message.message['Error']}")
 
 print("Welcome to the Graveyard!\n")
 print("Goal is to find and open a treasure chest.")
 print("Type Quit at any time to quit the game.\n")
 SetUpGame()
 while True:
-    location_description =  map.map[character.row][character.col]
+    location_description =  map.map_layout[character.row][character.col]
+    print(f"location_description: {location_description}")
     for tile_option in map.tiles:
-      if tile_option == location_description:
-        print(f"{map.tiles[tile_option]['Description']}")
+        if tile_option == location_description:
+            print(f"{map.tiles.get(tile_option, 'Invalid tile type')['Description']}")
     MainMenu()
