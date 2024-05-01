@@ -2,16 +2,27 @@ from tabulate import tabulate
 
 update_marker = "X"  # Change the marker for the player's position
 
-tile = ["Entrance", "Mausoleum", "Catacombs", "Secret Passage", 
+tile = ["Enterance", "Mausoleum", "Catacombs", "Secret Passage", 
    "Royal Tomb", "Graveyard Chapel"]
 
 tiles = {
-    "Enterance": {"Description": "You are at the entrance of the graveyard."},
-    "Mausoleum": {"Description": "You are in the mausoleum."},
-    "Catacombs": {"Description": "You are in the catacombs."},
-    "Secret Passage": {"Description": "You found a secret passage!"},
-    "Royal Tomb": {"Description": "You are in the royal tomb."},
-    "Graveyard Chapel": {"Description": "You are in the graveyard chapel."}
+  "Enterance": {"Description": """An eerie graveyard with
+weathered tombstones and overgrown vegetation."""},
+
+  "Mausoleum": {"Description": """A dimly lit chamber with
+rows of intricately carved sarcophagi."""},
+
+  "Catacombs": {"Description": """A maze of narrow tunnels
+lined with ancient burial niches."""},
+
+  "Secret Passage": {"Description": """A hidden passage concealed
+by vines, promising untold secrets."""},
+
+  "Royal Tomb": {"Description": """A grand chamber adorned with
+carvings, guarding a ruler's resting place."""},
+
+  "Graveyard Chapel": {"Description": """A solemn chapel with
+stained-glass windows casting colors on weathered pews."""}
 }
 
 map_layout = [

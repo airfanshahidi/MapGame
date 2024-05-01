@@ -1,5 +1,5 @@
 ╒═══════════╤════════════╤══════════════════╤══════════════════╕
-│ Enterance │ X          │ Catacombs        │ Secret Passage   │
+│ Enterance │ Mausoleum  │ Catacombs        │ Secret Passage   │
 ├───────────┼────────────┼──────────────────┼──────────────────┤
 │ Masoleum  │ Royal Tomb │ Royal Tomb       │ Graveyard Chapel │
 ├───────────┼────────────┼──────────────────┼──────────────────┤
