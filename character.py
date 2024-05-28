@@ -1,2 +1,4 @@
-row = 0     
-col = 0   
+class Character:
+  def __init__(self):
+    self.row = 0     
+    self.col = 0

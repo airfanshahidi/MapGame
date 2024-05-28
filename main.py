@@ -1,99 +1,120 @@
-import sys  # Import the sys module for system-specific operations (e.g., exiting the program)
-import inventory  # Import the inventory module for managing the player's inventory
-import character  # Import the character module for managing the player's character
-import message  # Import the message module for displaying messages to the player
-import map  # Import the map module for managing the game map
-from map import map_layout, tiles  # Import the map_layout and tiles from the map module
+"""
+Graveyard Adventure Game by Airfan Shahidi
+------------------------------------------
 
-main_menu = ["explore", "search", "view map", "view inventory"]  # List of options for the main menu
-direction_menu = ["north", "south", "east", "west"]  # List of directions for movement
+Welcome to the Graveyard Adventure Game!
 
-def SetUpGame():
-    # Set the starting position of the character
-    character.row = 0
-    character.col = 0
-    map.export_map()  # Export the initial map to a file
+In this text based adventure game, you will explore a haunted graveyard and uncover its secrets.
 
-def print_location_description():
-    # Get the current location from the map layout
-    location = map.map_layout[character.row][character.col]
-    # Get the description for the current location from the tiles dictionary
-    description = tiles.get(location, {}).get("Description", f"Invalid location: {location}")
-    print(f"location_description: {location}")
-    print(description)
+Yours is the mission to find the treasure hidden within the graveyard.
 
-def Movement():
-    orientating = True
-    while orientating:
-        print("   Choose a direction: ")
-        # Print the available directions based on the character's current position
-        if not character.row == 0:
-            print(f"   -{direction_menu[0].capitalize()}")
-        if not character.row == map.max_row:
-            print(f"   -{direction_menu[1].capitalize()}")
-        if not character.col == map.max_col:
-            print(f"   -{direction_menu[2].capitalize()}")
-        if not character.col == 0:
-            print(f"   -{direction_menu[3].capitalize()}")
-        orientating = False
-        dirchoice = input("   Choice: ").lower()
-        # Move the character based on the chosen direction
-        if dirchoice == direction_menu[0] and character.row > 0:
-            character.row -= 1
-        elif dirchoice == direction_menu[1] and character.row < map.max_row:
-            character.row += 1
-        elif dirchoice == direction_menu[2] and character.col < map.max_col:
-            character.col += 1
-        elif dirchoice == direction_menu[3] and character.col > 0:
-            character.col -= 1
-        elif dirchoice == "quit":
-            print(f"{message.message['Quit']} ")
-            sys.exit()  # Exit the program if the user chooses to quit
-        else:
-            print(f"{message.message['Error']}")
-            orientating = True  # If the input is invalid, ask for direction again
-    map.update_map(character.row, character.col)  # Update the map with the character's new position
-    print_location_description()  # Print the description of the new location
+As you explore the graveyard, you will encounter various obstacles and challenges.
 
-def MainMenu():
-    thinking = True
-    while thinking:
-        print("   Choose one of the following options: ")
-        for options in main_menu:
-            print(f"   -{options.capitalize()}")
-        mainChoice = input("   Choice: ").lower()
-        # Perform different actions based on the chosen main menu option
-        if mainChoice == main_menu[0]:
-            Movement()
-            thinking = False
-        elif mainChoice == main_menu[1]:
-            inventory.InspectRoom()
-            print_location_description()
-            thinking = False
-        elif mainChoice == main_menu[2]:
-            map.update_map(character.row, character.col)
-            map.read_map()
-            thinking = False
-        elif mainChoice == main_menu[3]:
-            inventory.ViewInventory()
-            thinking = False
-        elif mainChoice == "cheat":
-            print(inventory.items["Key"]["Location"])  # Cheat code to print the location of the key
-        elif mainChoice == "quit":
-            print(f"{message.message['Quit']} ")
-            sys.exit()  # Exit the program if the user chooses to quit
-        else:
-            print(f"{message.message['Error']}")
+To play the game, you will need to use the commands provided to navigate through the graveyard.
 
+Good luck and have fun!
+
+"""
+from character import Character
+from inventory import Inventory
+from map import Map
+import sys
+
+class Game:
+    def __init__(self):
+         # Initialize game menu options and objects
+         self.main_menu = ["explore", "search", "view map", "view inventory"]
+         self.direction_menu = ["north", "south", "east", "west"]
+         self.character = Character()
+         self.inventory = Inventory()
+         self.game_map = Map()
+
+    def SetUpGame(self):
+         # Set up initial game state
+         self.character.row = 0
+         self.character.col = 0
+         self.game_map.export_map()
+
+    def print_location_description(self):
+         # Print current location description
+         location = self.game_map.map_layout[self.character.row][self.character.col]
+         description = self.game_map.tiles.get(location, {}).get("Description", f"Invalid location: {location}")
+         print(f"location_description: {location}")
+         print(description)
+
+    def Movement(self):
+         # Handle player movement
+         orientating = True
+         while orientating:
+            print("   Choose a direction: ")
+            # Display available directions
+            if not self.character.row == 0:
+                print(f"   -{self.direction_menu[0].capitalize()}")
+            if not self.character.row == self.game_map.max_row:
+                print(f"   -{self.direction_menu[1].capitalize()}")
+            if not self.character.col == self.game_map.max_col:
+                print(f"   -{self.direction_menu[2].capitalize()}")
+            if not self.character.col == 0:
+                print(f"   -{self.direction_menu[3].capitalize()}")
+            orientating = False
+            dirchoice = input("   Choice: ").lower()
+            # Update character position based on choice
+            if dirchoice == self.direction_menu[0] and self.character.row > 0:
+                self.character.row -= 1
+            elif dirchoice == self.direction_menu[1] and self.character.row < self.game_map.max_row:
+                self.character.row += 1
+            elif dirchoice == self.direction_menu[2] and self.character.col < self.game_map.max_col:
+                self.character.col += 1
+            elif dirchoice == self.direction_menu[3] and self.character.col > 0:
+                self.character.col -= 1
+            elif dirchoice == "quit":
+                print("Quitting the game...")
+                sys.exit()
+            else:
+                print("Invalid choice. Please try again.")
+                orientating = True
+         self.game_map.update_map(self.character.row, self.character.col)
+
+    def MainMenu(self):
+         # Display main menu and handle choices
+         thinking = True
+         while thinking:
+            print("   Choose one of the following options: ")
+            for option in self.main_menu:
+                print(f"   -{option}")
+            mainChoice = input("   Choice: ")
+            if mainChoice.lower() == "quit":
+                thinking = False
+                print("Goodbye!")
+            elif mainChoice.lower() == self.main_menu[0].lower():
+                self.Movement()
+                thinking = False
+            elif mainChoice.lower() == self.main_menu[1].lower():
+                self.inventory.InspectRoom(self.character.row, self.character.col)
+                self.print_location_description()
+                thinking = False
+            elif mainChoice.lower() == self.main_menu[2].lower():
+                self.game_map.read_map()
+                self.print_location_description()
+                thinking = False
+            elif mainChoice.lower() == self.main_menu[3].lower():
+                self.inventory.view_inventory()
+                thinking = False
+            else:
+                print("Invalid choice. Please try again.")
+
+# Start the game
 print("Welcome to the Graveyard!\n")
 print("Goal is to find and open a treasure chest.")
 print("Type Quit at any time to quit the game.\n")
-SetUpGame()  # Set up the game
+
+game = Game()
+game.SetUpGame()
 while True:
-    # Print the description of the current location
-    location_description = map.map_layout[character.row][character.col]
+    # Game loop
+    location_description = game.game_map.map_layout[game.character.row][game.character.col]
     print(f"location_description: {location_description}")
-    for tile_option in map.tiles:
-        if tile_option == location_description:
-            print(f"{map.tiles.get(tile_option, 'Invalid tile type')['Description']}")
-    MainMenu()  # Display the main menu
+    for tile_option in game.game_map.tiles:
+         if tile_option == location_description:
+            print(f"{game.game_map.tiles.get(tile_option, 'Invalid tile type')['Description']}")
+    game.MainMenu()
